@@ -1,5 +1,4 @@
-1. Your test suite did not perform as expected.
-HINT: Review the function descriptions to ensure all of your test cases are accurate.
+1. Your test suite properly identified the correct solution!
 
 2. Your test suite properly identified an incorrect solution!
 
@@ -9,4 +8,5 @@ HINT: Review the function descriptions to ensure all of your test cases are accu
 
 5. Your test suite properly identified an incorrect solution!
 
-score: 4/5
+score: 5/5
+Your test suite identified all bugs present!
