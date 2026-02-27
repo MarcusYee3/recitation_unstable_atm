@@ -45,18 +45,18 @@ TEST_CASE("Example: Create a new account", "[ex-1]") {
   REQUIRE(sam_account.owner_name == "Sam Sepiol");
   REQUIRE(sam_account.balance == 300.30);
 
-  REQUIRE_THROWS_AS(atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30),
-                    std::invalid_argument);
-
   auto transactions = atm.GetTransactions();
   REQUIRE(accounts.contains({12345678, 1234}));
   REQUIRE(accounts.size() == 1);
   std::vector<std::string> empty;
   REQUIRE(transactions[{12345678, 1234}] == empty);
+  REQUIRE_THROWS_AS(atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30),
+                    std::invalid_argument);
 }
 
 TEST_CASE("Example: Simple widthdraw", "[ex-2]") {
   Atm atm;
+  Atm dummy;
   atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
   atm.RegisterAccount(22222222, 2222, "Dummy", 0);
   REQUIRE_THROWS_AS(atm.WithdrawCash(22222222, 2222, -1),
@@ -67,9 +67,8 @@ TEST_CASE("Example: Simple widthdraw", "[ex-2]") {
   auto accounts = atm.GetAccounts();
   Account sam_account = accounts[{12345678, 1234}];
 
-  REQUIRE(sam_account.balance == 280.30);
-  auto transactions = atm.GetTransactions();
-  REQUIRE(transactions.size() == 1);
+  REQUIRE(atm.CheckBalance(12345678, 1234) == 280.30);
+  REQUIRE_THROWS_AS(atm.CheckBalance(12345671, 1234), std::invalid_argument);
 }
 
 TEST_CASE("Example: Simple Deposit", "[ex-3]") {
