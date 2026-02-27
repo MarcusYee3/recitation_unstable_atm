@@ -1,12 +1,11 @@
-1. Your test suite did not perform as expected.
-HINT: Review the function descriptions to ensure all of your test cases are accurate.
+Your test suite did not compile!
 
-2. Your test suite properly identified an incorrect solution!
+tests/tests.cc:117:11: error: use of undeclared identifier 'CompareFileToString'
+  117 |   REQUIRE(CompareFileToString("./prompt.txt", expected_ledger));
+      |           ^
+tests/tests.cc:117:11: error: use of undeclared identifier 'CompareFileToString'
+tests/tests.cc:117:11: error: use of undeclared identifier 'CompareFileToString'
+3 errors generated.
 
-3. Your test suite properly identified an incorrect solution!
 
-4. Your test suite properly identified an incorrect solution!
-
-5. Your test suite properly identified an incorrect solution!
-
-score: 4/5
+score: 0/5
