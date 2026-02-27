@@ -85,7 +85,8 @@ TEST_CASE("Example: Simple Deposit", "[ex-3]") {
 
   REQUIRE(sam_account.balance == 320.30);
   auto transactions = atm.GetTransactions();
-  REQUIRE(transactions.size() == 1);
+  REQUIRE(transactions.size() == 2);
+  REQUIRE(transactions[{12345678, 1234}].size() == 1);
 }
 
 TEST_CASE("Example: Print Prompt Ledger", "[ex-4]") {
