@@ -46,10 +46,12 @@ TEST_CASE("Example: Create a new account", "[ex-1]") {
   REQUIRE(sam_account.balance == 300.30);
 
   auto transactions = atm.GetTransactions();
-  REQUIRE(accounts.contains({12345678, 1234}));
-  REQUIRE(accounts.size() == 1);
+  REQUIRE(transactions.contains({12345678, 1234}));
+  REQUIRE(transactions.size() == 1);
+
   std::vector<std::string> empty;
   REQUIRE(transactions[{12345678, 1234}] == empty);
+
   REQUIRE_THROWS_AS(atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30),
                     std::invalid_argument);
 }
