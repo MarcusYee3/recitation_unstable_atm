@@ -44,6 +44,9 @@ TEST_CASE("Example: Create a new account", "[ex-1]") {
   REQUIRE(sam_account.owner_name == "Sam Sepiol");
   REQUIRE(sam_account.balance == 300.30);
 
+  REQUIRE_THROWS_AS(atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30),
+                    std::invalid_argument);
+
   auto transactions = atm.GetTransactions();
   REQUIRE(accounts.contains({12345678, 1234}));
   REQUIRE(accounts.size() == 1);
@@ -54,21 +57,33 @@ TEST_CASE("Example: Create a new account", "[ex-1]") {
 TEST_CASE("Example: Simple widthdraw", "[ex-2]") {
   Atm atm;
   atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
+  atm.RegisterAccount(22222222, 2222, "Dummy", 0);
+  REQUIRE_THROWS_AS(atm.WithdrawCash(22222222, 2222, -1),
+                    std::invalid_argument);
+  REQUIRE_THROWS_AS(atm.WithdrawCash(22222222, 2222, 1), std::runtime_error);
+  REQUIRE_THROWS_AS(atm.WithdrawCash(11111111, 1111, 1), std::invalid_argument);
   atm.WithdrawCash(12345678, 1234, 20);
   auto accounts = atm.GetAccounts();
   Account sam_account = accounts[{12345678, 1234}];
 
   REQUIRE(sam_account.balance == 280.30);
+  auto transactions = atm.GetTransactions();
+  REQUIRE(transactions.size() == 1);
 }
 
 TEST_CASE("Example: Simple Deposit", "[ex-3]") {
   Atm atm;
   atm.RegisterAccount(12345678, 1234, "Sam Sepiol", 300.30);
+  atm.RegisterAccount(22222222, 2222, "Dummy", 0);
+  REQUIRE_THROWS_AS(atm.DepositCash(22222222, 2222, -1), std::invalid_argument);
+  REQUIRE_THROWS_AS(atm.DepositCash(11111111, 1111, 1), std::invalid_argument);
   atm.DepositCash(12345678, 1234, 20);
   auto accounts = atm.GetAccounts();
   Account sam_account = accounts[{12345678, 1234}];
 
   REQUIRE(sam_account.balance == 320.30);
+  auto transactions = atm.GetTransactions();
+  REQUIRE(transactions.size() == 1);
 }
 
 TEST_CASE("Example: Print Prompt Ledger", "[ex-4]") {
@@ -82,5 +97,7 @@ TEST_CASE("Example: Print Prompt Ledger", "[ex-4]") {
   transactions[{12345678, 1234}].push_back(
       "Deposit - Amount: $32000.00, Updated Balance: $72099.90");
   atm.PrintLedger("./prompt.txt", 12345678, 1234);
+  REQUIRE_THROWS_AS(atm.PrintLedger("./prompt.txt", 11111111, 1239),
+                    std::invalid_argument);
   REQUIRE(CompareFiles("./ex-1.txt", "./prompt.txt"));
 }
